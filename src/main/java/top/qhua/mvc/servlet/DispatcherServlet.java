@@ -95,11 +95,11 @@ public class DispatcherServlet extends HttpServlet {
 						Autowired auto=field.getAnnotation(Autowired.class);
 						String key=auto.value();
 						if("".equals(key)){
-							key=field.getGenericType().toString().replace("class ", "");
+							key=field.getGenericType().toString().replace("class ", "").replace("interface ", "");
 						}
 						
 						if(null==beans.get(key)){
-							i(" do ioc err  not find instance["+key+"] -> "+field.getName());
+							throw new RuntimeException(" do ioc err  not find instance["+key+"] -> "+field.getName());
 						}
 						
 						field.setAccessible(true);

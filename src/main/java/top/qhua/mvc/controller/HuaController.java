@@ -11,12 +11,13 @@ import top.qhua.mvc.annaotation.Controller;
 import top.qhua.mvc.annaotation.RequestMaping;
 import top.qhua.mvc.annaotation.RequestParam;
 import top.qhua.mvc.service.HuaService;
+import top.qhua.mvc.service.impl.HuaServiceImpl;
 
 @Controller
 public class HuaController {
 
 	@Autowired
-	private HuaService huaService;
+	private HuaServiceImpl huaService;
 	
 	@RequestMaping("/query")
 	public void query(HttpServletRequest request,HttpServletResponse response,@RequestParam("name") String name){
