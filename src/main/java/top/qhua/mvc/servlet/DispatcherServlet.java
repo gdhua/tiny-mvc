@@ -94,6 +94,9 @@ public class DispatcherServlet extends HttpServlet {
 					if(field.isAnnotationPresent(Autowired.class)){
 						Autowired auto=field.getAnnotation(Autowired.class);
 						String key=auto.value();
+						if("".equals(key)){
+							key=field.getGenericType().toString().replace("class ", "");
+						}
 						
 						if(null==beans.get(key)){
 							i(" do ioc err  not find instance["+key+"] -> "+field.getName());
@@ -154,10 +157,11 @@ public class DispatcherServlet extends HttpServlet {
 				}else if(clazz.isAnnotationPresent(Service.class)){
 					Service c= clazz.getAnnotation(Service.class);
 					Object instance=clazz.newInstance();
-					if(!"".equals(c.value())){
-						key=c.value();
-					}else{
+					if("".equals(c.value())){
+						
 						key=clazz.getName();
+					}else{
+						key=c.value();
 					}
 					 
 					beans.put(key, instance);
