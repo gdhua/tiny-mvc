@@ -13,6 +13,9 @@ import top.qhua.mvc.annaotation.RequestParam;
 import top.qhua.mvc.service.HuaService;
 import top.qhua.mvc.service.impl.HuaServiceImpl;
 
+/**
+ * 测试控制类实现
+ */
 @Controller
 public class HuaController {
 

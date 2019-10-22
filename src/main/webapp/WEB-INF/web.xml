@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-	<display-name>mini-mvc</display-name>
+	<display-name>tiny-mvc</display-name>
 	<servlet>
 		<servlet-name>DispatcherServlet</servlet-name>
 		<servlet-class>top.qhua.mvc.servlet.DispatcherServlet</servlet-class>

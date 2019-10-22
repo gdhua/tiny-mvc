@@ -32,19 +32,20 @@ public class DispatcherServlet extends HttpServlet {
 	private List<String> classFiles=new ArrayList<String>();
     private HashMap<String,Object> handleMapping=new HashMap<String,Object>();
 	private HashMap<String,Object> beans=new HashMap<String,Object>();
+	@Override
 	public void init(ServletConfig config) throws ServletException {
-        System.out.println("mini-mvc start …… ");
+        System.out.println("tiny-mvc start …… ");
         scanPackage("top.qhua.mvc");
         doInstance();
         doIoc();
         buildUrlMapping();
-        System.out.println("mini-mvc start OK .");
+        System.out.println("tiny-mvc start OK .");
 	}
 
 	private void buildUrlMapping() {
 		
 		if(beans.entrySet().size()==0){
-			System.out.println("木有实例化类");
+			i("木有实例化类");
 			return;
 		}
 		
@@ -56,7 +57,6 @@ public class DispatcherServlet extends HttpServlet {
 				RequestMaping root=	clazz.getAnnotation(RequestMaping.class);
 				if(root!=null){
 					classUrl = root.value();
-
 				}
 			    
 			    Method[] methods=clazz.getMethods();
