@@ -25,12 +25,17 @@ import top.qhua.mvc.annaotation.Controller;
 import top.qhua.mvc.annaotation.RequestMaping;
 import top.qhua.mvc.annaotation.RequestParam;
 import top.qhua.mvc.annaotation.Service;
+import top.qhua.mvc.service.HandlerInterceptor;
 
 public class DispatcherServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = -3066836991617115341L;
 	private List<String> classFiles=new ArrayList<String>();
     private HashMap<String,Object> handleMapping=new HashMap<String,Object>();
+	/**
+	 * 拦截器服务容器
+	 */
+	private HashMap<String,HandlerInterceptor> interceptorBean =new HashMap<String,HandlerInterceptor>();
 	private HashMap<String,Object> beans=new HashMap<String,Object>();
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -163,9 +168,16 @@ public class DispatcherServlet extends HttpServlet {
 					}else{
 						key=c.value();
 					}
-					 
-					beans.put(key, instance);
-					i("doInstance service -> "+key);
+
+					if(clazz.isAssignableFrom(HandlerInterceptor.class)){
+						interceptorBean.put(key, (HandlerInterceptor) instance);
+						i("doInstance service -> "+key);
+					}else{
+						beans.put(key, instance);
+						i("doInstance service -> "+key);
+					}
+
+
 
 				}
 			
@@ -216,9 +228,17 @@ public class DispatcherServlet extends HttpServlet {
                  
                  String packageClassName= method.getDeclaringClass().getName();
                  Object classObject= beans.get(packageClassName);
-                 
+				 HandlerInterceptor  handlerInterceptor= interceptorBean.get(path);
                  try {
-    				method.invoke(classObject, param);
+                 	if(handlerInterceptor!=null){
+						if(handlerInterceptor.preHandle(req,resp,null)){
+							 method.invoke(classObject, param);
+							handlerInterceptor.afterHandler(req,resp,null);
+						}
+					}else{
+						method.invoke(classObject, param);
+					}
+
     			} catch (IllegalAccessException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
@@ -228,8 +248,10 @@ public class DispatcherServlet extends HttpServlet {
     			} catch (InvocationTargetException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
-    			}
-             }else{
+    			} catch (Exception e) {
+					 e.printStackTrace();
+				 }
+			 }else{
             	 i("无对应url->"+path);
              }
              
